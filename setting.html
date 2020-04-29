@@ -10,8 +10,19 @@
 
 	<body>
 		<script src="js/mui.js"></script>
-		<script type="text/javascript">
-			mui.init()
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var current = plus.webview.currentWebview();
+					current.addEventListener("show", function() {
+						$.toast('我是个人设置页面', {
+							duration: 'short',
+							type: 'div'
+						});
+					});
+				});
+			}(mui, document));
 		</script>
 		<div class="mui-content">
 			<ul class="mui-table-view">
@@ -39,6 +50,16 @@
 						<div class="mui-media-body">
 							CBD
 							<p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+			<br />
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media" style="text-align: center;">
+					<a id="link_logout" href="javascript:;">
+						<div class="mui-media-body">
+							退出登录
 						</div>
 					</a>
 				</li>
