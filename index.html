@@ -10,11 +10,32 @@
 		<script type="text/javascript" charset="utf-8">
 			mui.plusReady(function() {
 				plus.navigator.setStatusBarStyle('light');
-				plus.navigator.setStatusBarBackground('#c9394a');
+				plus.navigator.setStatusBarBackground('#4169E1');
 			})
 		</script>
 		<script type="text/javascript">
-			var muxinArray = [{
+			document.addEventListener("plusready", function() {
+				plus.push.addEventListener("click", function(msg) {
+					//、alert("请点击: " + msg.content);
+					mui.openWindow({
+						url: 'sys_message.html',
+						id: 'sys_message.html',
+						preload: true,
+						show: {
+							aniShow: 'pop-in'
+						},
+						styles: {
+							popGesture: 'hide'
+						},
+						waiting: {
+							autoShow: false
+						}
+					});
+				}, false);
+			}, false);
+
+
+			var pathArray = [{
 				pageId: "main.html",
 				pageUrl: "main.html",
 				title: "首页"
@@ -35,47 +56,65 @@
 				top: "44px",
 				bottom: "50px"
 			};
-			console.log("-----33333------")
+			var title;
+			var titleTxt;
+			mui.ready(function() {
+				title = document.getElementById("title");
+				titleTxt = title.innerText;
+			});
+			console.log("------------------")
 			mui.plusReady(function() {
+				void plus.push.createMessage("我是系统推送消息", "", {});
+				mui.back = function() {
+					return false;
+				}
 				var indexWebview = plus.webview.currentWebview();
-				console.log("------33-----")
-				for (var i = 0; i < muxinArray.length; i++) {
-					var muxinPage = plus.webview.create(muxinArray[i].pageUrl,
-						muxinArray[i].pageId,
+				for (var i = 0; i < pathArray.length; i++) {
+					var muxinPage = plus.webview.create(pathArray[i].pageUrl,
+						pathArray[i].pageId,
 						muxinStyle);
 					// 隐藏webview窗口
 					muxinPage.hide();
 					// 追加每一个子页面到当前主页面
 					indexWebview.append(muxinPage);
 				}
-				plus.webview.show(muxinArray[0].pageId);
+				plus.webview.show(pathArray[0].pageId);
 
 				// 批量绑定tap事件，展示不同的页面
 				mui(".mui-bar-tab").on("tap", "a", function() {
 					var tabindex = this.getAttribute("tabindex");
 
 					// 显示点击的tab选项所对应的页面
-					plus.webview.show(muxinArray[tabindex].pageId, "fade-in", 200);
-					document.getElementById("title").innerText=muxinArray[tabindex].title;
+					plus.webview.show(pathArray[tabindex].pageId, "fade-in", 200);
+					document.getElementById("title").innerText = pathArray[tabindex].title;
+					titleTxt = pathArray[tabindex].title;
 
 					// 隐藏其他的不需要的页面
-					for (var i = 0; i < muxinArray.length; i++) {
+					for (var i = 0; i < pathArray.length; i++) {
 						if (i != tabindex) {
-							plus.webview.hide(muxinArray[i].pageId, "fade-out", 200);
+							plus.webview.hide(pathArray[i].pageId, "fade-out", 200);
 						}
 					}
 				});
 				setTimeout("initData()", "1000");
-				
+				// 对网络连接进行事件监听
+				setInterval(function() {
+					// 网络状态获取和判断
+					var connectionStatus = plus.networkinfo.getCurrentType();
+					debugger;
+					if (connectionStatus == 0 || connectionStatus == 1) {
+						// 关闭网络连接
+						title.innerHTML = "<b>" + titleTxt + "(未连接)</b>";
+					} else {
+						document.getElementById("title").innerText = titleTxt;
+					}
+				}, 1000);
 				//
-				
 			});
 			// 预加载
 			function initData() {
-				var imooc_chatlist = plus.webview.getWebviewById("imooc-chatlist.html");
-				mui.fire(imooc_chatlist, "refresh");
-				var imooc_me = plus.webview.getWebviewById("imooc-me.html");
-				mui.fire(imooc_me, "refresh");
+				var setting = plus.webview.getWebviewById("setting.html");
+				mui.fire(setting, "refresh");
 			}
 		</script>
 	</head>

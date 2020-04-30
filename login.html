@@ -129,7 +129,7 @@
 		<script type="text/javascript">
 			mui.plusReady(function() {
 				plus.navigator.setStatusBarStyle('light');
-				plus.navigator.setStatusBarBackground('#c9394a');
+				plus.navigator.setStatusBarBackground('#4169E1');
 				var userform = document.getElementById("userform");
 				var account = document.getElementById("account");
 				var password = document.getElementById("password");
@@ -144,6 +144,8 @@
 						var appid = plus.runtime.appid;
 						console.log("我是登录。。。。", cid);
 						console.log("我的appid。。。。", appid);
+						account.blur();
+						password.blur();
 						mui.ajax("www.baidu.com", {
 							data: {},
 							dataType: 'json', //服务器返回json格式数据
@@ -162,7 +164,11 @@
 							}
 
 						});
-						mui.openWindow("index.html", "index.html");
+						mui.openWindow({
+							url: "index.html",
+							id: "index.html"
+							//createNew: true
+						});
 						plus.key.hideSoftKeybord();
 					}
 					e.preventDefault();
