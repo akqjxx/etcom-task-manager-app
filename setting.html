@@ -83,6 +83,17 @@
 					plus.webview.open('login.html');
 					index.close();
 				});
+				
+				
+				// 查看我的二维码
+				var link_my_qrcode = document.getElementById("link_my_qrcode");
+				link_my_qrcode.addEventListener("tap", function(){
+					mui.openWindow({
+						url: "qrCode.html", 
+						id: "qrCode.html", 
+						styles: {}
+					})
+				});
 			});
 		</script>
 	</body>
